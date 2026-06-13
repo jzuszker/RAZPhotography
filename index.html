@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="noir">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RZ Photography — Capturing Moments</title>
+<meta name="description" content="Fine art photography by RZ. Minimalist, emotive imagery. Browse the gallery, customize frames and filters live, download wallpapers, collect photo books, and access private client galleries.">
+<meta property="og:title" content="RZ Photography — Capturing Moments">
+<meta property="og:description" content="Through the lens of minimalism and emotion.">
+<meta property="og:type" content="website">
+
+<!--
+  ============================================================
+  RZ PHOTOGRAPHY  |  Rebuilt and upgraded single file site
+  ------------------------------------------------------------
+  Keeps everything the original had: live frame styles (none, thin,
+  thick, shadow, rounded, polaroid), frame colors, image filters
+  (color, b&w, sepia, saturate, contrast), and the same six
+  sections (Gallery, Wallpapers, Photo Books, About, Contact, Vault).
+  Adds: lightbox, working downloads, contact form, dark/light theme,
+  a real secure-style vault gate, scroll motion, and SEO tags.
+
+  TO MAKE IT YOURS
+  - Replace every picsum.photos URL with your own images.
+  - Vault demo passphrase: RZSTUDIO.
+  - Contact form posts to Formspree (swap the action URL) or your own endpoint.
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --maxw:1240px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --radius:0px;
+}
+/* Dark (default) */
+[data-theme="noir"]{
+  --bg:#0b0b0d; --bg-soft:#121215; --surface:#17171c;
+  --line:rgba(255,255,255,.12); --text:#f2f0ec; --text-dim:#9a988f;
+  --accent:#d9c089; --accent-soft:rgba(217,192,137,.14);
+}
+/* Light */
+[data-theme="paper"]{
+  --bg:#f4f1ea; --bg-soft:#ffffff; --surface:#ffffff;
+  --line:rgba(20,18,14,.14); --text:#1a1813; --text-dim:#6b6658;
+  --accent:#9a7b2e; --accent-soft:rgba(154,123,46,.12);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Inter',sans-serif;font-weight:300;line-height:1.7;
+  transition:background .5s var(--ease),color .5s var(--ease);
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+h1,h2,h3,.serif{font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.01em}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.34em;color:var(--accent);margin-bottom:1rem}
+.section{max-width:var(--maxw);margin:0 auto;padding:6rem 1.5rem;scroll-margin-top:80px}
+.section-head{max-width:620px;margin:0 auto 3.2rem;text-align:center}
+.section-head h2{font-size:clamp(2rem,4.5vw,3rem);line-height:1.08}
+.section-head p{color:var(--text-dim);margin-top:.9rem}
+
+.btn{
+  display:inline-flex;align-items:center;gap:.55rem;
+  padding:.82rem 1.8rem;border:1px solid var(--accent);background:transparent;
+  font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;
+  border-radius:var(--radius);transition:all .3s var(--ease);
+}
+.btn:hover{background:var(--accent);color:var(--bg)}
+.btn.solid{background:var(--accent);color:var(--bg)}
+.btn.solid:hover{background:transparent;color:var(--text)}
+.btn.sm{padding:.5rem 1rem;font-size:.68rem}
+
+/* ===== HEADER ===== */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.05rem 1.5rem;
+  background:color-mix(in srgb,var(--bg) 84%,transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+}
+.brand{font-family:'Fraunces',serif;font-size:1.2rem;letter-spacing:.18em}
+.brand b{color:var(--accent);font-weight:500}
+nav{display:flex;align-items:center;gap:1.5rem}
+.nav-links{display:flex;gap:1.4rem}
+.nav-links a{font-size:.72rem;text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim);transition:color .25s}
+.nav-links a:hover{color:var(--text)}
+@media (max-width:920px){.nav-links{display:none}}
+.theme-toggle{background:none;border:1px solid var(--line);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.menu-btn{display:none;background:none;border:none}
+@media (max-width:920px){.menu-btn{display:block}}
+#mobileNav{display:none;position:fixed;inset:0;z-index:55;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+#mobileNav.open{display:flex}
+#mobileNav a{font-family:'Fraunces',serif;font-size:1.6rem}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:grid;align-items:center;position:relative;overflow:hidden}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,var(--bg) 96%),radial-gradient(110% 80% at 50% 40%,transparent 35%,var(--bg) 125%)}
+.hero-inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;width:100%;padding:0 1.5rem;text-align:center}
+.hero h1{font-size:clamp(2.8rem,9vw,6.5rem);line-height:.98;font-weight:300}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{margin:1.4rem auto 0;max-width:48ch;color:var(--text-dim);font-size:1.05rem}
+.hero-cta{margin-top:2.4rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.scroll-cue{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:2;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim)}
+
+/* ===== CONTROL BAR (frame + filter studio) ===== */
+.studio-bar{position:sticky;top:64px;z-index:40;background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.studio-inner{max-width:var(--maxw);margin:0 auto;padding:.9rem 1.5rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center}
+.ctrl{display:flex;align-items:center;gap:.7rem}
+.ctrl > span{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap}
+.chip{padding:.4rem .8rem;border:1px solid var(--line);background:transparent;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;border-radius:var(--radius);transition:all .2s;color:var(--text-dim)}
+.chip:hover{color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.color-chips{display:flex;gap:.45rem}
+.cc{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);padding:0;transition:transform .2s}
+.cc:hover{transform:scale(1.15)}
+.cc[aria-pressed="true"]{box-shadow:0 0 0 2px var(--bg-soft),0 0 0 4px var(--accent)}
+
+/* ===== FRAME ENGINE ===== */
+.fr{
+  --fc:#111;--fw:0px;--fimg:none;
+  background:var(--fc);padding:var(--fw);position:relative;
+  transition:padding .25s var(--ease),background .25s var(--ease),border-radius .25s var(--ease),box-shadow .25s var(--ease);
+}
+.fr img{width:100%;height:100%;object-fit:cover;filter:var(--fimg);transition:filter .3s}
+.fr.s-none{--fw:0px}
+.fr.s-thin{--fw:8px}
+.fr.s-thick{--fw:22px}
+.fr.s-shadow{--fw:0px;box-shadow:0 26px 60px -12px rgba(0,0,0,.7),0 8px 20px rgba(0,0,0,.45)}
+.fr.s-rounded{--fw:10px;border-radius:18px;overflow:hidden}
+.fr.s-rounded img{border-radius:10px}
+.fr.s-polaroid{--fw:12px;padding:12px 12px 46px;background:#f7f5ef;box-shadow:0 20px 50px -14px rgba(0,0,0,.6)}
+.fr.s-polaroid::after{content:attr(data-cap);position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:'Fraunces',serif;font-style:italic;color:#3a352c;font-size:.85rem}
+
+/* ===== GALLERY ===== */
+.masonry{columns:3;column-gap:1.4rem}
+@media (max-width:900px){.masonry{columns:2}}
+@media (max-width:560px){.masonry{columns:1}}
+.tile{break-inside:avoid;margin-bottom:1.4rem;cursor:zoom-in;position:relative}
+.tile .fr{width:100%}
+.tile .cap{position:absolute;left:0;right:0;bottom:0;padding:1.2rem 1rem .9rem;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff;opacity:0;transition:opacity .3s;font-size:.8rem;letter-spacing:.04em}
+.tile:hover .cap{opacity:1}
+.tile .cap b{font-family:'Fraunces',serif;font-weight:500;display:block;font-size:1rem}
+.fr.s-polaroid + .cap, .fr.s-polaroid ~ .cap{display:none}
+
+/* ===== WALLPAPERS ===== */
+.wp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.6rem}
+.wp{border:1px solid var(--line);background:var(--bg-soft);overflow:hidden;display:flex;flex-direction:column}
+.wp .ph{aspect-ratio:16/10;overflow:hidden}
+.wp .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.wp:hover .ph img{transform:scale(1.06)}
+.wp .body{padding:1.1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.wp .body b{font-family:'Fraunces',serif;font-weight:500}
+.wp .body small{color:var(--text-dim);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+
+/* ===== PHOTO BOOKS ===== */
+.books{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem}
+.book{display:flex;flex-direction:column;gap:1rem}
+.book .cover{aspect-ratio:3/4;position:relative;box-shadow:-12px 14px 40px -10px rgba(0,0,0,.55);overflow:hidden}
+.book .cover::before{content:"";position:absolute;top:0;bottom:0;left:0;width:14px;background:linear-gradient(90deg,rgba(0,0,0,.4),transparent);z-index:2}
+.book .cover img{width:100%;height:100%;object-fit:cover}
+.book h3{font-size:1.25rem}
+.book .meta{color:var(--text-dim);font-size:.82rem}
+.book .price{color:var(--accent);font-size:.95rem;margin-top:.2rem}
+
+/* ===== ABOUT ===== */
+.about{display:grid;grid-template-columns:.85fr 1.15fr;gap:3.5rem;align-items:center}
+@media (max-width:820px){.about{grid-template-columns:1fr}}
+.about .portrait{aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line)}
+.about .portrait img{width:100%;height:100%;object-fit:cover}
+.about h2{font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin-bottom:1.2rem}
+.about p{color:var(--text-dim);margin-bottom:1.1rem}
+.stats{display:flex;gap:2.4rem;margin-top:1.8rem}
+.stats .n{font-family:'Fraunces',serif;font-size:2rem;color:var(--accent)}
+.stats .l{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)}
+
+/* ===== CONTACT ===== */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+@media (max-width:820px){.contact{grid-template-columns:1fr}}
+.field{margin-bottom:1.2rem}
+.field label{display:block;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.5rem}
+.field input,.field textarea{width:100%;background:var(--bg-soft);border:1px solid var(--line);color:var(--text);padding:.8rem .9rem;font:inherit;border-radius:var(--radius)}
+.field textarea{min-height:130px;resize:vertical}
+.contact-aside p{color:var(--text-dim);margin-bottom:1rem}
+.contact-aside a{color:var(--accent)}
+.form-msg{font-size:.85rem;margin-top:.6rem;min-height:1.2em;color:var(--accent)}
+
+/* ===== VAULT ===== */
+#vault{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.vault-box{max-width:430px;margin:0 auto;border:1px solid var(--line);background:var(--bg);padding:2.6rem;text-align:center}
+.vault-box .lock{width:42px;height:42px;margin:0 auto 1rem;color:var(--accent)}
+.vault-msg{font-size:.85rem;margin-top:.8rem;min-height:1.2em}
+.vault-msg.err{color:#e08a8a}.vault-msg.ok{color:var(--accent)}
+#vaultGallery{display:none;margin-top:2.5rem}
+.vault-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.4rem;margin-top:1.5rem}
+.vault-grid .fr{aspect-ratio:1;width:100%}
+
+/* ===== LIGHTBOX ===== */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:2rem}
+.lb.open{display:flex}
+.lb img{max-width:90vw;max-height:84vh;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.lb-close{position:absolute;top:1.4rem;right:1.6rem;background:none;border:none;color:#fff;font-size:2rem}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:none;border:1px solid rgba(255,255,255,.3);color:#fff;width:48px;height:48px;border-radius:50%;font-size:1.4rem}
+.lb-prev{left:1.6rem}.lb-next{right:1.6rem}
+.lb-cap{position:absolute;bottom:1.6rem;left:0;right:0;text-align:center;color:#fff;font-family:'Fraunces',serif;font-style:italic}
+
+/* ===== FOOTER ===== */
+footer{border-top:1px solid var(--line);padding:3rem 1.5rem}
+.foot{max-width:var(--maxw);margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.5rem;color:var(--text-dim);font-size:.82rem}
+.foot a:hover{color:var(--accent)}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="brand" href="#top">RZ<b>PHOTOGRAPHY</b></a>
+  <nav aria-label="Main">
+    <div class="nav-links">
+      <a href="#top">Home</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#wallpapers">Wallpapers</a>
+      <a href="#books">Photo Books</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#vault">Vault</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></svg>
+    </button>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </nav>
+</header>
+<div id="mobileNav">
+  <a href="#top">Home</a><a href="#gallery">Gallery</a><a href="#wallpapers">Wallpapers</a>
+  <a href="#books">Photo Books</a><a href="#about">About</a><a href="#contact">Contact</a><a href="#vault">Vault</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <img class="hero-img" src="https://picsum.photos/seed/rzhero/1920/1200" alt="Atmospheric landscape at first light">
+  <div class="hero-inner">
+    <p class="eyebrow">Fine Art Photography</p>
+    <h1>Capturing <em>moments.</em></h1>
+    <p>Through the lens of minimalism and emotion. A visual journey of light, composition, and quiet storytelling.</p>
+    <div class="hero-cta">
+      <a class="btn solid" href="#gallery">View Portfolio</a>
+      <a class="btn" href="#contact">Work With Me</a>
+    </div>
+  </div>
+  <span class="scroll-cue">Scroll</span>
+</section>
+
+<!-- STUDIO CONTROL BAR -->
+<div class="studio-bar" aria-label="Frame and filter controls">
+  <div class="studio-inner">
+    <div class="ctrl">
+      <span id="lblFrame">Frame</span>
+      <div class="chips" role="group" aria-labelledby="lblFrame">
+        <button class="chip" data-frame="none" aria-pressed="true">None</button>
+        <button class="chip" data-frame="thin" aria-pressed="false">Thin</button>
+        <button class="chip" data-frame="thick" aria-pressed="false">Thick</button>
+        <button class="chip" data-frame="shadow" aria-pressed="false">Shadow</button>
+        <button class="chip" data-frame="rounded" aria-pressed="false">Rounded</button>
+        <button class="chip" data-frame="polaroid" aria-pressed="false">Polaroid</button>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span id="lblColor">Color</span>
+      <div class="color-chips" role="group" aria-labelledby="lblColor">
+        <button class="cc" data-color="#111111" style="background:#111" aria-pressed="true" aria-label="Black"></button>
+        <button class="cc" data-color="#f7f5ef" style="background:#f7f5ef" aria-pressed="false" aria-label="White"></button>
+        <button class="cc" data-color="#c9a24b" style="background:#c9a24b" aria-pressed="false" aria-label="Gold"></button>
+        <button class="cc" data-color="#c9cfd8" style="background:#c9cfd8" aria-pressed="false" aria-label="Silver"></button>
+        <button class="cc" data-color="#7a5a3a" style="background:#7a5a3a" aria-pressed="false" aria-label="Natural wood"></button>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span id="lblFilter">Filter</span>
+      <div class="chips" role="group" aria-labelledby="lblFilter">
+        <button class="chip" data-filter="none" aria-pressed="true">Color</button>
+        <button class="chip" data-filter="grayscale(1)" aria-pressed="false">B&amp;W</button>
+        <button class="chip" data-filter="sepia(.75)" aria-pressed="false">Sepia</button>
+        <button class="chip" data-filter="saturate(1.8)" aria-pressed="false">Saturate</button>
+        <button class="chip" data-filter="contrast(1.4)" aria-pressed="false">Contrast</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section class="section" id="gallery">
+  <div class="section-head reveal">
+    <p class="eyebrow">Portfolio</p>
+    <h2>Gallery</h2>
+    <p>A curated collection of photographs. Use the bar above to reframe and re-tone every image, then click any piece to view it full screen.</p>
+  </div>
+  <div class="masonry" id="masonry"></div>
+</section>
+
+<!-- WALLPAPERS -->
+<section class="section" id="wallpapers">
+  <div class="section-head reveal">
+    <p class="eyebrow">Free Downloads</p>
+    <h2>Wallpapers</h2>
+    <p>High-resolution wallpapers for desktop and mobile. Free for personal use.</p>
+  </div>
+  <div class="wp-grid" id="wpGrid"></div>
+</section>
+
+<!-- PHOTO BOOKS -->
+<section class="section" id="books">
+  <div class="section-head reveal">
+    <p class="eyebrow">Collect</p>
+    <h2>Photo Books</h2>
+    <p>Limited edition prints and curated collections in beautifully crafted books.</p>
+  </div>
+  <div class="books" id="bookGrid"></div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="about reveal">
+    <div class="portrait"><img src="https://picsum.photos/seed/rzportrait/800/1000" alt="Portrait of the photographer"></div>
+    <div>
+      <p class="eyebrow">About</p>
+      <h2>The story behind the lens.</h2>
+      <p>I photograph the in-between moments, the pause before the wave breaks, the held breath of an empty street at dawn. My work strips a scene to its essential geometry and lets light carry the feeling.</p>
+      <p>Over fifteen years I have shot across thirty countries for editorial, brands, and private collectors. Every print I release is made to last a lifetime on archival paper.</p>
+      <div class="stats">
+        <div><div class="n">15+</div><div class="l">Years</div></div>
+        <div><div class="n">30</div><div class="l">Countries</div></div>
+        <div><div class="n">200+</div><div class="l">Editions</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="section-head reveal">
+    <p class="eyebrow">Get in touch</p>
+    <h2>Contact</h2>
+    <p>Let's create something beautiful together. Collaborations, prints, or just to say hello.</p>
+  </div>
+  <div class="contact reveal">
+    <!-- Swap the action with your own Formspree or backend endpoint -->
+    <form id="contactForm" action="https://formspree.io/f/your-id-here" method="POST">
+      <div class="field"><label for="cn">Name</label><input id="cn" name="name" required></div>
+      <div class="field"><label for="ce">Email</label><input id="ce" type="email" name="email" required></div>
+      <div class="field"><label for="cm">Message</label><textarea id="cm" name="message" required></textarea></div>
+      <button class="btn solid" type="submit">Send message</button>
+      <p class="form-msg" id="formMsg" role="status"></p>
+    </form>
+    <div class="contact-aside">
+      <p><b style="color:var(--text)">Studio</b><br>Markham, Ontario, Canada</p>
+      <p><b style="color:var(--text)">Email</b><br><a href="mailto:hello@rzphotography.com">hello@rzphotography.com</a></p>
+      <p><b style="color:var(--text)">Social</b><br><a href="#">Instagram</a> · <a href="#">Behance</a> · <a href="#">Vimeo</a></p>
+      <p style="font-size:.78rem">For licensing and commission rates, mention your timeline and intended use and I will reply within two business days.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VAULT -->
+<section class="section" id="vault">
+  <div class="section-head reveal">
+    <p class="eyebrow">Private</p>
+    <h2>Secure Vault</h2>
+    <p>Private client galleries and personal archives protected with secure authentication. Demo passphrase: <b>RZSTUDIO</b></p>
+  </div>
+  <div class="vault-box reveal" id="vaultBox">
+    <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+    <div class="field" style="text-align:left"><label for="vp">Passphrase</label><input id="vp" type="password" autocomplete="off" placeholder="Enter your client passphrase"></div>
+    <button class="btn solid" id="vaultBtn" style="width:100%;justify-content:center">Unlock vault</button>
+    <p class="vault-msg" id="vaultMsg" role="status"></p>
+  </div>
+  <div id="vaultGallery">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 class="serif" style="font-size:1.4rem">Client Set · Spring 2026</h3>
+      <button class="btn sm" id="vaultLock">Lock</button>
+    </div>
+    <div class="vault-grid" id="vaultGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div><p class="brand" style="margin-bottom:.4rem">RZ<b>PHOTOGRAPHY</b></p><p>Capturing moments since 2011.</p></div>
+    <div><p><a href="#gallery">Gallery</a> · <a href="#wallpapers">Wallpapers</a> · <a href="#books">Photo Books</a></p><p><a href="#about">About</a> · <a href="#contact">Contact</a> · <a href="#vault">Vault</a></p></div>
+    <div><p>&copy; 2026 RZ Photography. All rights reserved.</p><p>All images are protected by copyright.</p></div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8250;</button>
+  <p class="lb-cap" id="lbCap"></p>
+</div>
+
+<script>
+/* ============ DATA: replace picsum URLs with your work ============ */
+const PHOTOS = [
+  {t:"First Light",   l:"Banff",        s:"rz1", r:"800/1000"},
+  {t:"Still Water",   l:"Faroe Islands",s:"rz2", r:"800/600"},
+  {t:"Ember",         l:"Patagonia",    s:"rz3", r:"800/1100"},
+  {t:"The Monolith",  l:"Namibia",      s:"rz4", r:"800/640"},
+  {t:"Salt Air",      l:"Amalfi",       s:"rz5", r:"800/1000"},
+  {t:"North Veil",    l:"Lofoten",      s:"rz6", r:"800/900"},
+  {t:"Quiet Street",  l:"Kyoto",        s:"rz7", r:"800/600"},
+  {t:"Drift",         l:"Iceland",      s:"rz8", r:"800/1050"},
+  {t:"Low Tide",      l:"Brittany",     s:"rz9", r:"800/700"}
+];
+const WALLPAPERS = [
+  {t:"Aurora",   sub:"3840 × 2160", s:"wp1"},
+  {t:"Dunes",    sub:"3840 × 2160", s:"wp2"},
+  {t:"Fog Line", sub:"3840 × 2160", s:"wp3"},
+  {t:"Tide",     sub:"3840 × 2160", s:"wp4"},
+  {t:"Pines",    sub:"3840 × 2160", s:"wp5"},
+  {t:"Coast",    sub:"3840 × 2160", s:"wp6"}
+];
+const BOOKS = [
+  {t:"Northern Quiet",  meta:"112 pages · Hardcover", price:"$68", s:"bk1"},
+  {t:"Edges of Water",  meta:"96 pages · Linen bound", price:"$74", s:"bk2"},
+  {t:"After the Rain",  meta:"128 pages · Limited 250", price:"$92", s:"bk3"}
+];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const frame={style:"none",color:"#111111",filter:"none"};
+const img=(seed,r="800/1000")=>`https://picsum.photos/seed/${seed}/${r.replace('/','/')}`;
+
+/* ============ THEME ============ */
+$("#themeToggle").addEventListener("click",()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  document.documentElement.setAttribute("data-theme",cur==="noir"?"paper":"noir");
+});
+
+/* ============ MOBILE NAV ============ */
+$("#menuBtn").addEventListener("click",()=>$("#mobileNav").classList.toggle("open"));
+$$("#mobileNav a").forEach(a=>a.addEventListener("click",()=>$("#mobileNav").classList.remove("open")));
+
+/* ============ FRAME ENGINE ============ */
+function frameClass(){return "fr s-"+frame.style;}
+function styleFrame(node,cap){
+  node.className=frameClass();
+  node.style.setProperty("--fc",frame.color);
+  node.style.setProperty("--fimg",frame.filter);
+  if(cap) node.setAttribute("data-cap",cap);
+}
+function restyleAll(){
+  $$(".fr").forEach(n=>{ n.className=frameClass();
+    n.style.setProperty("--fc",frame.color);
+    n.style.setProperty("--fimg",frame.filter); });
+}
+$$("[data-frame]").forEach(b=>b.addEventListener("click",()=>{
+  frame.style=b.dataset.frame;
+  $$("[data-frame]").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  restyleAll();
+}));
+$$("[data-color]").forEach(b=>b.addEventListener("click",()=>{
+  frame.color=b.dataset.color;
+  $$("[data-color]").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  restyleAll();
+}));
+$$("[data-filter]").forEach(b=>b.addEventListener("click",()=>{
+  frame.filter=b.dataset.filter;
+  $$("[data-filter]").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  restyleAll();
+}));
+
+/* ============ GALLERY ============ */
+$("#masonry").innerHTML=PHOTOS.map((p,i)=>`
+  <figure class="tile reveal" data-i="${i}">
+    <div class="fr s-none" data-cap="${p.t}" style="--fc:#111;--fimg:none"><img src="${img(p.s,p.r)}" alt="${p.t}, ${p.l}" loading="lazy"></div>
+    <figcaption class="cap"><b>${p.t}</b>${p.l}</figcaption>
+  </figure>`).join("");
+$$("#masonry .tile").forEach(t=>t.addEventListener("click",()=>openLB(+t.dataset.i)));
+
+/* ============ WALLPAPERS (working download) ============ */
+$("#wpGrid").innerHTML=WALLPAPERS.map(w=>`
+  <div class="wp reveal">
+    <div class="ph"><img src="${img(w.s,'1200/750')}" alt="${w.t} wallpaper" loading="lazy"></div>
+    <div class="body"><div><b>${w.t}</b><br><small>${w.sub}</small></div>
+      <a class="btn sm" href="${img(w.s,'3840/2160')}" download="${w.t}-wallpaper.jpg" target="_blank" rel="noopener">Download</a></div>
+  </div>`).join("");
+
+/* ============ PHOTO BOOKS ============ */
+$("#bookGrid").innerHTML=BOOKS.map(b=>`
+  <div class="book reveal">
+    <div class="cover"><img src="${img(b.s,'600/800')}" alt="${b.t} book cover" loading="lazy"></div>
+    <div><h3>${b.t}</h3><p class="meta">${b.meta}</p><p class="price">${b.price}</p></div>
+    <button class="btn sm" style="align-self:flex-start" onclick="alert('Checkout connects to your store. Wire this button to Stripe or your shop.')">Add to cart</button>
+  </div>`).join("");
+
+/* ============ VAULT (demo gate) ============ */
+$("#vaultBtn").addEventListener("click",unlock);
+$("#vp").addEventListener("keydown",e=>{if(e.key==="Enter")unlock();});
+function unlock(){
+  const msg=$("#vaultMsg");
+  if($("#vp").value.trim().toUpperCase()==="RZSTUDIO"){
+    msg.textContent="Unlocked. Loading your gallery."; msg.className="vault-msg ok";
+    $("#vaultGrid").innerHTML=[1,2,3,4,5,6].map(n=>`
+      <div class="fr s-thin" style="--fc:#111;--fimg:none"><img src="${img('vault'+n,'600/600')}" alt="Private proof ${n}"></div>`).join("");
+    setTimeout(()=>{$("#vaultBox").style.display="none";$("#vaultGallery").style.display="block";restyleAll();},450);
+  }else{
+    msg.textContent="That passphrase was not recognized."; msg.className="vault-msg err";
+  }
+}
+$("#vaultLock").addEventListener("click",()=>{
+  $("#vaultGallery").style.display="none";$("#vaultBox").style.display="block";
+  $("#vp").value="";$("#vaultMsg").textContent="";
+});
+
+/* ============ CONTACT (graceful, no backend in demo) ============ */
+$("#contactForm").addEventListener("submit",e=>{
+  if($("#contactForm").action.includes("your-id-here")){
+    e.preventDefault();
+    $("#formMsg").textContent="Demo mode: connect Formspree or your endpoint to send for real.";
+  }
+});
+
+/* ============ LIGHTBOX ============ */
+let lbi=0;
+const lb=$("#lightbox");
+function openLB(i){lbi=i;showLB();lb.classList.add("open");}
+function showLB(){const p=PHOTOS[lbi];$("#lbImg").src=img(p.s,'1400/1600');$("#lbImg").alt=p.t;$("#lbCap").textContent=`${p.t} — ${p.l}`;}
+$("#lbClose").addEventListener("click",()=>lb.classList.remove("open"));
+$("#lbNext").addEventListener("click",()=>{lbi=(lbi+1)%PHOTOS.length;showLB();});
+$("#lbPrev").addEventListener("click",()=>{lbi=(lbi-1+PHOTOS.length)%PHOTOS.length;showLB();});
+lb.addEventListener("click",e=>{if(e.target===lb)lb.classList.remove("open");});
+document.addEventListener("keydown",e=>{
+  if(!lb.classList.contains("open"))return;
+  if(e.key==="Escape")lb.classList.remove("open");
+  if(e.key==="ArrowRight")$("#lbNext").click();
+  if(e.key==="ArrowLeft")$("#lbPrev").click();
+});
+
+/* ============ REVEALS ============ */
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target);}}),{threshold:.1});
+$$(".reveal").forEach(el=>io.observe(el));
+
+restyleAll();
+</script>
+</body>
+</html>
